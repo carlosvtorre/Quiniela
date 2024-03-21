@@ -225,6 +225,7 @@ public class MainAdmin extends javax.swing.JDialog {
         PanelJornadasAbiertas p = new PanelJornadasAbiertas();
         ShowPanel(p);
 //prueba
+//prueba 2
     }//GEN-LAST:event_BtnJornadasAbiertasActionPerformed
 
     /**
