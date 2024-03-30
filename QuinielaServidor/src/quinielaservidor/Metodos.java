@@ -13,11 +13,12 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
 
     //Variable para guardar la conexión
     Connection conexion = null;
+
     //Constructor que recibe la nonexión a la base de datos
     public Metodos(Connection conexion) throws RemoteException {
         this.conexion = conexion;
     }
-    
+
     //Aqui Agregar los metodos
     public int iniciarSesion(String nombreUsuario, String password) throws RemoteException {
         // Verificar si el usuario existe
@@ -40,7 +41,7 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
     }
 
     private boolean usuarioExiste(String nombreUsuario) throws RemoteException {
-        String sql = "SELECT COUNT(*) AS count FROM usuarios WHERE nombre = ?";
+        String sql = "SELECT COUNT(*) AS count FROM usuarios WHERE NombreUsuario = ?";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setString(1, nombreUsuario);
             ResultSet resultSet = statement.executeQuery();
@@ -55,7 +56,7 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
     }
 
     private boolean contraseñaIncorrecta(String nombreUsuario, String password) throws RemoteException {
-        String sql = "SELECT COUNT(*) AS count FROM usuarios WHERE nombre = ? AND password != ?";
+        String sql = "SELECT COUNT(*) AS count FROM usuarios WHERE NombreUsuario = ? AND Password != ?";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setString(1, nombreUsuario);
             statement.setString(2, password);
@@ -71,13 +72,13 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
     }
 
     private int obtenerEstadoUsuario(String nombreUsuario) throws RemoteException {
-        String sql = "SELECT estatus, actividad FROM usuarios WHERE nombre = ?";
+        String sql = "SELECT Estatus, Actividad FROM usuarios WHERE NombreUsuario = ?";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setString(1, nombreUsuario);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int estatus = resultSet.getInt("estatus");
-                int actividad = resultSet.getInt("actividad");
+                int estatus = resultSet.getInt("Estatus");
+                int actividad = resultSet.getInt("Actividad");
                 if (estatus == 1 && actividad == 1) {
                     return 1; // Usuario administrador activo
                 } else if (estatus == 0 && actividad == 1) {
@@ -91,6 +92,27 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
         }
         return -3; // Error al obtener el estado del usuario
     }
+
+    public boolean registrarUsuario(String nombreUsuario, String password) throws RemoteException {
+        // Verificar si el nombre de usuario ya existe
+        if (usuarioExiste(nombreUsuario)) {
+            System.out.println("El nombre de usuario ya existe.");
+            return false;
+        }
+
+        String sql = "INSERT INTO usuarios (NombreUsuario, Password, Estatus, Actividad) VALUES (?, ?, 0, 0)";
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+            statement.setString(1, nombreUsuario);
+            statement.setString(2, password);
+            int filasInsertadas = statement.executeUpdate();
+            return filasInsertadas > 0; // Devuelve true si se insertó correctamente
+        } catch (SQLException e) {
+            System.out.println("Error al registrar el usuario: " + e.getMessage());
+            return false;
+        }
+    }
+
+
     
     public boolean registrarEquipo(String nombreEquipo) throws RemoteException {
         String sql = "INSERT INTO equipos (nombre) VALUES (?)";
@@ -123,33 +145,37 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
     }
 
     public ArrayList<String> obtenerUsuariosActivos() throws RemoteException {
-        ArrayList<String> usuariosActivos = new ArrayList<>();
-        String sql = "SELECT nombre FROM usuarios WHERE actividad = 1";
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String nombreUsuario = resultSet.getString("nombre");
-                usuariosActivos.add(nombreUsuario);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al obtener usuarios activos: " + e.getMessage());
+    ArrayList<String> usuariosActivos = new ArrayList<>();
+    String sql = "SELECT ID, NombreUsuario FROM usuarios WHERE Actividad = 1";
+    try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int idUsuario = resultSet.getInt("ID");
+            String nombreUsuario = resultSet.getString("NombreUsuario");
+            usuariosActivos.add(idUsuario + "@" + nombreUsuario);
         }
-        return usuariosActivos;
+    } catch (SQLException e) {
+        System.out.println("Error al obtener usuarios activos: " + e.getMessage());
     }
+    return usuariosActivos;
+}
 
-    public ArrayList<String> obtenerUsuariosInactivos() throws RemoteException {
-        ArrayList<String> usuariosInactivos = new ArrayList<>();
-        String sql = "SELECT nombre FROM usuarios WHERE actividad = 0";
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String nombreUsuario = resultSet.getString("nombre");
-                usuariosInactivos.add(nombreUsuario);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al obtener usuarios inactivos: " + e.getMessage());
+public ArrayList<String> obtenerUsuariosInactivos() throws RemoteException {
+    ArrayList<String> usuariosInactivos = new ArrayList<>();
+    String sql = "SELECT ID, NombreUsuario FROM usuarios WHERE Actividad = 0";
+    try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int idUsuario = resultSet.getInt("ID");
+            String nombreUsuario = resultSet.getString("NombreUsuario");
+            usuariosInactivos.add(idUsuario + "@" + nombreUsuario);
         }
-        return usuariosInactivos;
+    } catch (SQLException e) {
+        System.out.println("Error al obtener usuarios inactivos: " + e.getMessage());
     }
+    return usuariosInactivos;
+}
+
+
 
 }

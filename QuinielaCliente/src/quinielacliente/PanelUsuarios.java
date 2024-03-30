@@ -1,6 +1,12 @@
 package quinielacliente;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import quinielainterfaz.Interfaz;
 
 /**
  *
@@ -24,8 +30,38 @@ DefaultTableModel modeloInactivos = new DefaultTableModel() {
     public PanelUsuarios() {
         initComponents();
         designTables();
+        llenarTablasUsuarios();
     }
     
+    public void llenarTablasUsuarios() {
+        try {
+            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
+
+            ArrayList<String> UsuariosActivos = quiniela.obtenerUsuariosActivos();
+            ArrayList<String> UsuariosInactivos = quiniela.obtenerUsuariosInactivos();
+
+            // Limpiar las tablas antes de llenarlas
+            modeloActivos.setRowCount(0);
+            modeloInactivos.setRowCount(0);
+
+            for (String usuario : UsuariosActivos) {
+                String[] datos = usuario.split("@");
+                modeloActivos.addRow(datos);
+            }
+
+            for (String usuario : UsuariosInactivos) {
+                String[] datos = usuario.split("@");
+                modeloInactivos.addRow(datos);
+            }
+
+        } catch (RemoteException e) {
+            System.out.println("Error" + e.getMessage());
+        } catch (NotBoundException ex) {
+            System.out.println("Error" + ex.getMessage());
+        }
+    }
+
     public void designTables() {
         String[] encabezados = new String[]{"ID", "Nombre"};//Encabezados de las tablas
         

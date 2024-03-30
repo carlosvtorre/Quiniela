@@ -11,5 +11,6 @@ public interface Interfaz extends Remote{
     public ArrayList<String> obtenerEquipos() throws RemoteException;
     public ArrayList<String> obtenerUsuariosActivos() throws RemoteException;
     public ArrayList<String> obtenerUsuariosInactivos() throws RemoteException;
+    public boolean registrarUsuario(String nombreUsuario, String password) throws RemoteException;
     
 }

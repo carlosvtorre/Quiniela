@@ -71,6 +71,11 @@ public class FVentana extends javax.swing.JFrame {
         jLabel2.setText("No tienes Cuenta?");
 
         BtnRegistrarse.setText("Registrarse");
+        BtnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnRegistrarseActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Agregar icono aquí");
 
@@ -179,6 +184,13 @@ public class FVentana extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_BtnIniciarSesionActionPerformed
+
+    private void BtnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRegistrarseActionPerformed
+        // Crear usuario
+        Registrarse r = new Registrarse(this, true);
+        r.setVisible(true);
+        
+    }//GEN-LAST:event_BtnRegistrarseActionPerformed
 
     /**
      * @param args the command line arguments
