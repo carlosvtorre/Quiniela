@@ -115,7 +115,7 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
 
     
     public boolean registrarEquipo(String nombreEquipo) throws RemoteException {
-        String sql = "INSERT INTO equipos (nombre) VALUES (?)";
+        String sql = "INSERT INTO equipos (Nombre) VALUES (?)";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setString(1, nombreEquipo);
             int filasInsertadas = statement.executeUpdate();
@@ -128,13 +128,13 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
 
     public ArrayList<String> obtenerEquipos() throws RemoteException {
         ArrayList<String> equipos = new ArrayList<>();
-        String sql = "SELECT id, nombre FROM equipos";
+        String sql = "SELECT ID, nombre FROM equipos";
 
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String nombre = resultSet.getString("nombre");
+                int id = resultSet.getInt("ID");
+                String nombre = resultSet.getString("Nombre");
                 equipos.add(id + "@" + nombre);
             }
         } catch (SQLException e) {
