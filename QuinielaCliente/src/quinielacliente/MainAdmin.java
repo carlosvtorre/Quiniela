@@ -1,7 +1,13 @@
 package quinielacliente;
 
 import java.awt.BorderLayout;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import quinielainterfaz.Interfaz;
 
 public class MainAdmin extends javax.swing.JDialog {
 
@@ -19,6 +25,32 @@ public class MainAdmin extends javax.swing.JDialog {
         PanelContenedor.add(panel, BorderLayout.CENTER);//agrega el panel que le mandamos
         PanelContenedor.updateUI();//Actualiza
     }
+    
+    public void GenerarJornadas() {
+        boolean jornadasAbiertas = false;
+        boolean exitoso = false;
+        try {
+            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);
+            Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
+
+            jornadasAbiertas = quiniela.hayJornadasAbiertas();
+            if (jornadasAbiertas) {
+                JOptionPane.showMessageDialog(null, "Ya existen jornadas abiertas.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                exitoso = quiniela.generarJornadas();
+                if (exitoso) {
+                    JOptionPane.showMessageDialog(null, "Se generaron correctamente las jornadas.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al generar las jornadas.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (RemoteException e) {
+            JOptionPane.showMessageDialog(null, "Error de conexión con el servidor: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NotBoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -201,10 +233,13 @@ public class MainAdmin extends javax.swing.JDialog {
 
     private void BtnGenerarJornadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGenerarJornadasActionPerformed
         // Aqui generar las jornadas con el metodo todos contra todos despues llamar el panel jornadas abiertas 
+        GenerarJornadas();
 
         //jornadas abiertas despues de generarlas
         PanelJornadasAbiertas p = new PanelJornadasAbiertas();
         ShowPanel(p);
+
+
     }//GEN-LAST:event_BtnGenerarJornadasActionPerformed
 
     private void BtnJornadasAbiertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnJornadasAbiertasActionPerformed

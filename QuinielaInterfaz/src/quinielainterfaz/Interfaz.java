@@ -14,5 +14,7 @@ public interface Interfaz extends Remote{
     public boolean registrarUsuario(String nombreUsuario, String password) throws RemoteException;//Registrar nuevo usuario.
     public boolean habilitarUsuario(int idUsuario) throws RemoteException;//Habilitar usuario
     public boolean habilitarUsuarios(ArrayList<Integer> idsUsuarios) throws RemoteException;//Habilitar todos los usuarios
+    public boolean generarJornadas() throws RemoteException;//Metodo que genera las jornadas y los equipos con el metodo todos contra todos
+    public boolean hayJornadasAbiertas() throws RemoteException;// este metodo devuelve true si hay jornadas abiertas si no hay o estan cerradas manda false
     
 }
