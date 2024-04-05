@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class Metodos extends UnicastRemoteObject implements Interfaz {
 
@@ -321,6 +322,46 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
             e.printStackTrace();
         }
         return false; // Si hay algún error o no se encontraron jornadas abiertas
+    }
+    
+    // Método para obtener todas las jornadas abiertas
+    public ArrayList<String> obtenerJornadasAbiertas() throws RemoteException {
+        ArrayList<String> jornadasAbiertas = new ArrayList<>();
+        String query = "SELECT ID, Nombre FROM jornada WHERE Estatus = 1";
+
+        try (PreparedStatement statement = conexion.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                int idJornada = resultSet.getInt("ID");
+                String nombreJornada = resultSet.getString("Nombre");
+                String jornadaInfo = idJornada + "@" + nombreJornada;
+                jornadasAbiertas.add(jornadaInfo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Manejo de excepciones (lanzar o manejar de alguna manera)
+        }
+
+        return jornadasAbiertas;
+    }
+
+// Método para obtener todas las jornadas cerradas
+    public ArrayList<String> obtenerJornadasCerradas() throws RemoteException {
+        ArrayList<String> jornadasCerradas = new ArrayList<>();
+        String query = "SELECT ID, Nombre FROM jornada WHERE Estatus = 0";
+
+        try (PreparedStatement statement = conexion.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                int idJornada = resultSet.getInt("ID");
+                String nombreJornada = resultSet.getString("Nombre");
+                String jornadaInfo = idJornada + "@" + nombreJornada;
+                jornadasCerradas.add(jornadaInfo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Manejo de excepciones (lanzar o manejar de alguna manera)
+        }
+
+        return jornadasCerradas;
     }
 
 }
