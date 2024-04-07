@@ -363,5 +363,85 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
 
         return jornadasCerradas;
     }
+    //metodo para obtener los partidos de una jornada con el id de la jornada
+    public ArrayList<String> obtenerPartidosPorJornada(int idJornada) throws RemoteException{
+        ArrayList<String> partidosJornada = new ArrayList<>();
+        String query = "SELECT partidos.ID, equiposLocal.Nombre AS EquipoLocal, equiposVisitante.Nombre AS EquipoVisitante "
+                + "FROM partidos "
+                + "JOIN equipos AS equiposLocal ON partidos.ID_Local = equiposLocal.ID "
+                + "JOIN equipos AS equiposVisitante ON partidos.ID_Visitante = equiposVisitante.ID "
+                + "WHERE partidos.ID_Jornada = ?";
+
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setInt(1, idJornada);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int idPartido = resultSet.getInt("ID");
+                String equipoLocal = resultSet.getString("EquipoLocal");
+                String equipoVisitante = resultSet.getString("EquipoVisitante");
+
+                String partidoInfo = idPartido + "@" + equipoLocal + "@" + equipoVisitante;
+                partidosJornada.add(partidoInfo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Manejo de excepciones (lanzar o manejar de alguna manera)
+        }
+
+        return partidosJornada;
+    }
+    
+    // Método para guardar los resultados en la base de datos
+    public void guardarResultados(ArrayList<String> resultados, int idJornada) throws RemoteException {
+        PreparedStatement statement = null;
+
+        try {
+            conexion.setAutoCommit(false); // Desactivar la confirmación automática para controlar las transacciones
+
+            // Iterar sobre los resultados
+            for (String resultado : resultados) {
+                // Separar el ID del partido y el resultado
+                String[] partes = resultado.split("@");
+                int idPartido = Integer.parseInt(partes[0]);
+                int resultadoPartido = Integer.parseInt(partes[1]);
+
+                // Actualizar el resultado en la tabla Partidos
+                String query = "UPDATE Partidos SET Resultado = ? WHERE ID = ?";
+                statement = conexion.prepareStatement(query);
+                statement.setInt(1, resultadoPartido);
+                statement.setInt(2, idPartido);
+                statement.executeUpdate();
+            }
+
+            // Cambiar el estatus de la jornada a inactivo
+            String queryEstatus = "UPDATE Jornada SET Estatus = 0 WHERE ID = ?";
+            statement = conexion.prepareStatement(queryEstatus);
+            statement.setInt(1, idJornada);
+            statement.executeUpdate();
+
+            conexion.commit(); // Confirmar la transacción
+            System.out.println("Resultados guardados exitosamente.");
+
+        } catch (SQLException e) {
+            try {
+                if (conexion != null) {
+                    conexion.rollback(); // Revertir la transacción en caso de error
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error al hacer rollback: " + ex.getMessage());
+            }
+            System.out.println("Error al guardar los resultados: " + e.getMessage());
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                conexion.setAutoCommit(true); // Reactivar la confirmación automática
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar el statement: " + e.getMessage());
+            }
+        }
+    }
 
 }

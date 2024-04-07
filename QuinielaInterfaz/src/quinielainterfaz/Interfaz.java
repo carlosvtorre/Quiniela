@@ -20,6 +20,6 @@ public interface Interfaz extends Remote{
     public boolean hayJornadasAbiertas() throws RemoteException;// este metodo devuelve true si hay jornadas abiertas si no hay o estan cerradas manda false
     public ArrayList<String> obtenerJornadasAbiertas() throws RemoteException;
     public ArrayList<String> obtenerJornadasCerradas() throws RemoteException;
-    
-    
+    public ArrayList<String> obtenerPartidosPorJornada(int idJornada) throws RemoteException;//obtener los partidos de una jornada
+    public void guardarResultados(ArrayList<String> resultados, int idJornada) throws RemoteException;
 }

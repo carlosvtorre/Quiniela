@@ -55,6 +55,12 @@ DefaultTableModel modeloQuinielasAbiertas = new DefaultTableModel() {
             System.out.println("Error" + ex.getMessage());
         }
     }
+    public int obtenerIdFilaSeleccionada() {
+        int filaSeleccionada = TablaQuinielasAbiertas.getSelectedRow();
+        // Obtener el valor de la primera columna (ID) de la fila seleccionada
+        return Integer.parseInt(TablaQuinielasAbiertas.getValueAt(filaSeleccionada, 0).toString());
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -142,8 +148,10 @@ DefaultTableModel modeloQuinielasAbiertas = new DefaultTableModel() {
 
     private void ResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResultadosActionPerformed
         // Popup menu resultados
-        GuardarResultados g = new GuardarResultados(null, true);
+        int idJornada = obtenerIdFilaSeleccionada();
+        GuardarResultados g = new GuardarResultados(null, true, idJornada);
         g.setVisible(true);
+        cargarJornadasAbiertas();
     }//GEN-LAST:event_ResultadosActionPerformed
 
 

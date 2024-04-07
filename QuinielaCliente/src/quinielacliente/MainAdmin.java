@@ -28,7 +28,7 @@ public class MainAdmin extends javax.swing.JDialog {
         PanelContenedor.add(panel, BorderLayout.CENTER);//agrega el panel que le mandamos
         PanelContenedor.updateUI();//Actualiza
     }
-    
+
     public void GenerarJornadas() {
         boolean jornadasAbiertas = false;
         boolean exitoso = false;
@@ -53,7 +53,6 @@ public class MainAdmin extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
