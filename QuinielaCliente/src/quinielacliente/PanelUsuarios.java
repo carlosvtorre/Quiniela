@@ -36,7 +36,7 @@ DefaultTableModel modeloInactivos = new DefaultTableModel() {
     
     public void llenarTablasUsuarios() {
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
             ArrayList<String> UsuariosActivos = quiniela.obtenerUsuariosActivos();
@@ -66,7 +66,7 @@ DefaultTableModel modeloInactivos = new DefaultTableModel() {
     public boolean HabilitarUsuario(int id) {
         boolean habilitar = false;
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
             
             habilitar = quiniela.habilitarUsuario(id);
@@ -83,7 +83,7 @@ DefaultTableModel modeloInactivos = new DefaultTableModel() {
         boolean habilitar = false;
         ArrayList<Integer> IDLista = obtenerIdsUsuariosInactivos();
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
             
             habilitar = quiniela.habilitarUsuarios(IDLista);

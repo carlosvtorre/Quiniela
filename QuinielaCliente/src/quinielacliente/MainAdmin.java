@@ -30,7 +30,7 @@ public class MainAdmin extends javax.swing.JDialog {
         boolean jornadasAbiertas = false;
         boolean exitoso = false;
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
             jornadasAbiertas = quiniela.hayJornadasAbiertas();
@@ -198,10 +198,9 @@ public class MainAdmin extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

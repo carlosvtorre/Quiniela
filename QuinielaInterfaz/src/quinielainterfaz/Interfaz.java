@@ -1,13 +1,20 @@
 package quinielainterfaz;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JComboBox;
 //import java.rmi.RemoteException;
 
 public interface Interfaz extends Remote{
     //Agregar los metodos de la clase Metodos del servidor aquí
     public int iniciarSesion(String nombreUsuario, String password) throws RemoteException;//Metodo para validar el inicio de sesión
     public boolean registrarEquipo(String nombreEquipo) throws RemoteException;//Registrar nuevo equipo, return true si fue exitoso el registro si no false.
+    public ArrayList<String> obtenerJornadasActivas() throws RemoteException;
+    public ArrayList<String[]> obtenerEquiposPorJornada(String nombreJornada) throws RemoteException;
+    public ArrayList<String[]> obtenerEquiposJugados(String nombreJornada) throws RemoteException;
+    public String[] obtenerEquiposPartidoMinimo(String nombreJornada) throws RemoteException;
+    public void guardarPrediccion(String equipoLocal, String equipoVisitante, String opcion) throws RemoteException;
     public ArrayList<String> obtenerEquipos() throws RemoteException;//Obtener lista de todos los equipos registrados
     public ArrayList<String> obtenerUsuariosActivos() throws RemoteException;//Obtener lista de usuarios activos.
     public ArrayList<String> obtenerUsuariosInactivos() throws RemoteException;//Obtener lista de usuarios inactivos.

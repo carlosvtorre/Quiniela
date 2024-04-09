@@ -12,12 +12,12 @@ public class QuinielaServidor {
         System.out.println("Conexión Exitosa");
         try {
             Registry registro = LocateRegistry.createRegistry(9000);//Arranco el servidor
-            registro.rebind("Quiniela", new Metodos(conexion));//Instanciamos el objeto operaciones. Modificar y mandar la conexión a la base se datos
+            registro.rebind("Quiniela", new Metodos(conexion) {});//Instanciamos el objeto operaciones. Modificar y mandar la conexión a la base se datos
 
             System.out.println("Servidor corriendo....");
 
         } catch (Exception e) {
-            System.out.println("Error el servidor no funciona....");
+            System.out.println("Error el servidor no funciona...." + e);
         }
     }
 

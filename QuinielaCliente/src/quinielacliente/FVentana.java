@@ -24,7 +24,7 @@ public class FVentana extends javax.swing.JFrame {
     public int IniciarSesion(String nombreUsuario, String password) {
         int sesion = 7;
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
             sesion = quiniela.iniciarSesion(nombreUsuario, password);

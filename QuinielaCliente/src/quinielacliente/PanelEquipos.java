@@ -37,7 +37,7 @@ public class PanelEquipos extends javax.swing.JPanel {
     public boolean RegistrarEquipo(String nombreEquipo) {//metodo para registrar un equipo en la base de datos
         boolean registroValor = false;
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
              registroValor = quiniela.registrarEquipo(nombreEquipo);
@@ -52,7 +52,7 @@ public class PanelEquipos extends javax.swing.JPanel {
     
     public void CargarEquipos() {
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
             ArrayList<String> equipos = quiniela.obtenerEquipos();
@@ -139,7 +139,7 @@ public class PanelEquipos extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
