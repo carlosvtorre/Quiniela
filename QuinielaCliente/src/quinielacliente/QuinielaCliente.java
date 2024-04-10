@@ -16,7 +16,7 @@ public class QuinielaCliente {
     
     public void llamarRMI(){
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
             //resultadoSuma = calculadora.suma(num1, num2); 

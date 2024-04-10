@@ -1,5 +1,11 @@
 package quinielacliente;
 
+import java.awt.BorderLayout;
+import java.rmi.NotBoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JPanel;
+
 public class MainJugador extends javax.swing.JDialog {
 
     public MainJugador(java.awt.Frame parent, boolean modal) {
@@ -8,81 +14,186 @@ public class MainJugador extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
+    private void ShowPanel(JPanel panel) {
+        panel.setSize(710, 420);//Le damos las medidas que tiene el PanelContenedor
+        panel.setLocation(0, 0);
+
+        PanelContenedor5.removeAll();//limpia el panel
+        PanelContenedor5.add(panel, BorderLayout.CENTER);//agrega el panel que le mandamos
+        PanelContenedor5.updateUI();//Actualiza
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        BtnExit = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        PanelContenedor5 = new javax.swing.JPanel();
+        PanelMenu = new javax.swing.JPanel();
+        BtnJugar = new javax.swing.JButton();
+        BtnResultados = new javax.swing.JButton();
+        BtnPremiacion = new javax.swing.JButton();
+        BtnExit1 = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Jugador");
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BtnExit.setText("Salir");
-        BtnExit.addActionListener(new java.awt.event.ActionListener() {
+        PanelContenedor5.setBackground(new java.awt.Color(255, 255, 255));
+        PanelContenedor5.setPreferredSize(new java.awt.Dimension(710, 420));
+
+        javax.swing.GroupLayout PanelContenedor5Layout = new javax.swing.GroupLayout(PanelContenedor5);
+        PanelContenedor5.setLayout(PanelContenedor5Layout);
+        PanelContenedor5Layout.setHorizontalGroup(
+            PanelContenedor5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 710, Short.MAX_VALUE)
+        );
+        PanelContenedor5Layout.setVerticalGroup(
+            PanelContenedor5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 420, Short.MAX_VALUE)
+        );
+
+        jPanel8.add(PanelContenedor5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 710, -1));
+
+        PanelMenu.setBackground(new java.awt.Color(204, 255, 255));
+
+        BtnJugar.setText("Jugar jornadas");
+        BtnJugar.setPreferredSize(new java.awt.Dimension(50, 24));
+        BtnJugar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnExitActionPerformed(evt);
+                BtnJugarActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(180, 180, 180)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
-                .addComponent(BtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
+        BtnResultados.setText("Resultados");
+        BtnResultados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnResultadosActionPerformed(evt);
+            }
+        });
+
+        BtnPremiacion.setText("Premiación");
+        BtnPremiacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPremiacionActionPerformed(evt);
+            }
+        });
+
+        BtnExit1.setText("Salir");
+        BtnExit1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnExit1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PanelMenuLayout = new javax.swing.GroupLayout(PanelMenu);
+        PanelMenu.setLayout(PanelMenuLayout);
+        PanelMenuLayout.setHorizontalGroup(
+            PanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(BtnJugar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(BtnResultados, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+            .addComponent(BtnPremiacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(BtnExit1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(BtnExit)
-                    .addComponent(jLabel1))
-                .addGap(19, 19, 19))
+        PanelMenuLayout.setVerticalGroup(
+            PanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelMenuLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(BtnJugar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnResultados, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnPremiacion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BtnExit1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(169, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        jPanel8.add(PanelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, -1, 420));
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel2.setText("Jugador");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap(388, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(312, 312, 312))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 376, Short.MAX_VALUE))
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+
+        jPanel8.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, -1));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnExitActionPerformed
-        // Boton Salir
-        System.exit(0); 
-    }//GEN-LAST:event_BtnExitActionPerformed
+    private void BtnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnJugarActionPerformed
+        // Agregar el panel JugarJornada aqui
+        PanelJugarJonada p = null;
+        try {
+            p = new PanelJugarJonada();
+        } catch (NotBoundException ex) {
+            Logger.getLogger(MainJugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ShowPanel(p);
+    }//GEN-LAST:event_BtnJugarActionPerformed
+
+    private void BtnResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnResultadosActionPerformed
+        // Agregar aqui el panel de usuarios
+        PanelResultados p = new PanelResultados();
+        ShowPanel(p);
+    }//GEN-LAST:event_BtnResultadosActionPerformed
+
+    private void BtnPremiacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPremiacionActionPerformed
+// Agregar aqui el panel de usuarios
+        PanelPremiacion p = new PanelPremiacion();
+        ShowPanel(p);
+    }//GEN-LAST:event_BtnPremiacionActionPerformed
+
+    private void BtnExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnExit1ActionPerformed
+        // Boton salir
+        System.exit(0);
+    }//GEN-LAST:event_BtnExit1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -127,9 +238,25 @@ public class MainJugador extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnExit;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton BtnExit1;
+    private javax.swing.JButton BtnJugar;
+    private javax.swing.JButton BtnPremiacion;
+    private javax.swing.JButton BtnResultados;
+    private javax.swing.JPanel PanelContenedor;
+    private javax.swing.JPanel PanelContenedor1;
+    private javax.swing.JPanel PanelContenedor2;
+    private javax.swing.JPanel PanelContenedor3;
+    private javax.swing.JPanel PanelContenedor4;
+    private javax.swing.JPanel PanelContenedor5;
+    private javax.swing.JPanel PanelMenu;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     // End of variables declaration//GEN-END:variables
 }

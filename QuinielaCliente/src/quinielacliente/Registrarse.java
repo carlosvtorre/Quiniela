@@ -30,7 +30,7 @@ public class Registrarse extends javax.swing.JDialog {
     public boolean registrarUsuario(String nombreUsuario, String password) {
         boolean registrar = false; 
         try {
-            Registry registro = LocateRegistry.getRegistry("127.0.0.1", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
+            Registry registro = LocateRegistry.getRegistry("192.168.0.152", 9000);// "127.0.0.1"=localhost, la ip del servidor/ puerto por el que se comunican
             Interfaz quiniela = (Interfaz) registro.lookup("Quiniela");
 
             registrar = quiniela.registrarUsuario(nombreUsuario, password);

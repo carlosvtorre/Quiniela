@@ -1,5 +1,7 @@
 package quinielaservidor;
 
+import java.sql.Statement;
+//import com.mysql.cj.xdevapi.Statement;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import quinielainterfaz.Interfaz;
@@ -9,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JOptionPane;
 
 public class Metodos extends UnicastRemoteObject implements Interfaz {
@@ -243,7 +246,6 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
         }
     }
 
-
     // Insertar jornada en la base de datos
     private int insertarJornada(String nombre, int estatus) {
         String sql = "INSERT INTO jornada (Nombre, Estatus) VALUES (?, ?)";
@@ -273,7 +275,6 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
             }
         }
     }
-
 
     // Obtener IDs de todos los equipos
     public List<Integer> obtenerEquiposIDs() {
@@ -309,8 +310,7 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
         return -1;
     }
 
-    
-    public boolean hayJornadasAbiertas(){
+    public boolean hayJornadasAbiertas() {
         String sql = "SELECT COUNT(*) AS total FROM jornada WHERE Estatus = 1";
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
@@ -444,4 +444,172 @@ public class Metodos extends UnicastRemoteObject implements Interfaz {
         }
     }
 
+    public ArrayList<String> obtenerJornadasActivas() throws RemoteException {
+        ArrayList<String> jornadasActivas = new ArrayList<>();
+
+        try {
+            String query = "SELECT Nombre FROM jornada WHERE Estatus = 1"; // Obtener solo las jornadas activas
+            PreparedStatement statement = conexion.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String nombreJornada = resultSet.getString("Nombre");
+                jornadasActivas.add(nombreJornada);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return jornadasActivas;
+    }
+
+    // Método para obtener los equipos (local y visitante) de una jornada seleccionada
+    public ArrayList<String[]> obtenerEquiposPorJornada(String nombreJornada) throws RemoteException {
+        ArrayList<String[]> equiposJornada = new ArrayList<>();
+
+        try {
+            String query = "SELECT local.Nombre AS Local, visitante.Nombre AS Visitante "
+                    + "FROM partidos "
+                    + "INNER JOIN equipos AS local ON partidos.ID_Local = local.ID "
+                    + "INNER JOIN equipos AS visitante ON partidos.ID_Visitante = visitante.ID "
+                    + "INNER JOIN jornada ON partidos.ID_Jornada = jornada.ID "
+                    + "WHERE jornada.Nombre = ? AND partidos.Resultado IS NULL"; // Agregar condición de resultado NULL
+
+            PreparedStatement statement = conexion.prepareStatement(query);
+            statement.setString(1, nombreJornada);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String local = resultSet.getString("Local");
+                String visitante = resultSet.getString("Visitante");
+                equiposJornada.add(new String[]{local, visitante});
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return equiposJornada;
+    }
+
+    public String[] obtenerEquiposPartidoMinimo(String nombreJornada) throws RemoteException {
+        String[] equiposPartido = new String[2];
+
+        try {
+            String query = "SELECT local.Nombre AS Local, visitante.Nombre AS Visitante, "
+                    + "partidos.ID_Local, partidos.ID_Visitante "
+                    + "FROM partidos "
+                    + "INNER JOIN equipos AS local ON partidos.ID_Local = local.ID "
+                    + "INNER JOIN equipos AS visitante ON partidos.ID_Visitante = visitante.ID "
+                    + "INNER JOIN jornada ON partidos.ID_Jornada = jornada.ID "
+                    + "WHERE jornada.Nombre = ? AND partidos.Resultado IS NULL "
+                    + "ORDER BY partidos.ID ASC "
+                    + "LIMIT 1";
+
+            PreparedStatement statement = conexion.prepareStatement(query);
+            statement.setString(1, nombreJornada);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String local = resultSet.getString("Local");
+                String visitante = resultSet.getString("Visitante");
+                int idLocal = resultSet.getInt("ID_Local");
+                int idVisitante = resultSet.getInt("ID_Visitante");
+
+                equiposPartido[0] = local; // Equipo local
+                equiposPartido[1] = visitante; // Equipo visitante
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return equiposPartido;
+    }
+
+    public void guardarPrediccion(String equipoLocal, String equipoVisitante, String opcion) throws RemoteException {
+        try {
+            // Obtener el ID del partido según los nombres de los equipos
+            int idPartido = obtenerIdPartido(equipoLocal, equipoVisitante);
+
+            // Actualizar la columna Resultado en la tabla Partidos
+            String query = "UPDATE Partidos SET Resultado = ? WHERE ID = ?";
+            PreparedStatement statement = conexion.prepareStatement(query);
+            statement.setString(1, opcion);
+            statement.setInt(2, idPartido);
+            statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para obtener el ID del partido según los nombres de los equipos
+    private int obtenerIdPartido(String equipoLocal, String equipoVisitante) throws SQLException {
+        String query = "SELECT ID FROM Partidos WHERE ID_Local IN (SELECT ID FROM equipos WHERE Nombre = ?) AND "
+                + "ID_Visitante IN (SELECT ID FROM equipos WHERE Nombre = ?)";
+        PreparedStatement statement = conexion.prepareStatement(query);
+        statement.setString(1, equipoLocal);
+        statement.setString(2, equipoVisitante);
+        ResultSet resultSet = statement.executeQuery();
+
+        int idPartido = -1;
+        if (resultSet.next()) {
+            idPartido = resultSet.getInt("ID");
+        }
+
+        statement.close();
+        return idPartido;
+    }
+    
+   public ArrayList<String[]> obtenerEquiposJugados(String nombreJornada) throws RemoteException {
+    ArrayList<String[]> equiposJornada = new ArrayList<>();
+
+    try {
+        String query = "SELECT local.Nombre AS Local, visitante.Nombre AS Visitante, partidos.Resultado "
+                + "FROM partidos "
+                + "INNER JOIN equipos AS local ON partidos.ID_Local = local.ID "
+                + "INNER JOIN equipos AS visitante ON partidos.ID_Visitante = visitante.ID "
+                + "INNER JOIN jornada ON partidos.ID_Jornada = jornada.ID "
+                + "WHERE jornada.Nombre = ? AND partidos.Resultado IS NOT NULL"; // Cambiar la condición a IS NOT NULL
+
+        PreparedStatement statement = conexion.prepareStatement(query);
+        statement.setString(1, nombreJornada);
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            String local = resultSet.getString("Local");
+            String visitante = resultSet.getString("Visitante");
+            int resultado = resultSet.getInt("Resultado");
+            String resultadoTexto;
+
+            // Lógica para determinar el resultado en texto
+            if (resultado == 1) {
+                resultadoTexto = "Local";
+            } else if (resultado == 2) {
+                resultadoTexto = "Empate";
+            } else if (resultado == 3) {
+                resultadoTexto = "Visitante";
+            } else {
+                resultadoTexto = "Desconocido";
+            }
+
+            equiposJornada.add(new String[]{local, visitante, resultadoTexto});
+        }
+
+        statement.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return equiposJornada;
 }
+
+    
+}
+
